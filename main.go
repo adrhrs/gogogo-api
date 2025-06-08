@@ -9,6 +9,7 @@ import (
 
 	"github.com/adrhrs/gogogo-api/internal/db"
 	"github.com/adrhrs/gogogo-api/internal/handler"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -31,6 +32,20 @@ func main() {
 
 	// Setup router
 	r := gin.Default()
+
+	// CORS config
+	config := cors.Config{
+		AllowOrigins:     []string{"*"}, // Use specific origins in production
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}
+	r.Use(cors.New(config))
+
+	// Setup router
+	// r := gin.Default()
 	r.GET("/ping", handler.Ping)
 	r.GET("/dbping", a.DBPing)
 
