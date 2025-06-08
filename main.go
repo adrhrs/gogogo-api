@@ -48,6 +48,7 @@ func main() {
 	// r := gin.Default()
 	r.GET("/ping", handler.Ping)
 	r.GET("/dbping", a.DBPing)
+	r.POST("/products", handler.CreateProductHandler(a.DB))
 
 	// Use port from Render (PORT is set automatically)
 	port := os.Getenv("PORT")
