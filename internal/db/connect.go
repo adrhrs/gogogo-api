@@ -12,22 +12,27 @@ import (
 
 var Pool *pgxpool.Pool
 
-func Init() error {
+func Init() (*pgxpool.Pool, error) {
+	isInternal := true
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		return fmt.Errorf("DATABASE_URL not set")
+		isInternal = false
+		dsn = "postgresql://gogogo_db_user:iM2hd6qpwVq071f6PLeJ8ehNqfSBSBIw@dpg-d12f9ejuibrs73f5kvbg-a.oregon-postgres.render.com/gogogo_db"
 	}
 
-	log.Println(dsn)
+	log.Println("dsn", dsn, isInternal)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	var err error
-	Pool, err = pgxpool.New(ctx, dsn)
+	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
-		return fmt.Errorf("unable to connect to db: %w", err)
+		return nil, fmt.Errorf("unable to connect to db: %w", err)
 	}
 
-	return nil
+	if err := pool.Ping(ctx); err != nil {
+		return nil, fmt.Errorf("unable to ping db: %w", err)
+	}
+
+	return pool, nil
 }
