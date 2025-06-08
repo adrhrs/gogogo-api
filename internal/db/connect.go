@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -16,6 +17,8 @@ func Init() error {
 	if dsn == "" {
 		return fmt.Errorf("DATABASE_URL not set")
 	}
+
+	log.Println(dsn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()

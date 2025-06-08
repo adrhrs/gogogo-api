@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/adrhrs/gogogo-api/internal/db"
 	"github.com/adrhrs/gogogo-api/internal/handler"
 	"github.com/gin-gonic/gin"
 )
@@ -11,10 +12,10 @@ import (
 func main() {
 	log.Println("starting..")
 
-	// // Initialize DB
-	// if err := db.Init(); err != nil {
-	// 	log.Fatalf("failed to connect to DB: %v", err)
-	// }
+	// Initialize DB
+	if err := db.Init(); err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
 
 	// Setup router
 	r := gin.Default()
